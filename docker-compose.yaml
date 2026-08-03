@@ -1,0 +1,49 @@
+# Set TAG to match whichever tag you built with docker-compose-build.yaml
+# (defaults to v1 in both files). e.g. `TAG=v2 docker-compose up`.
+services:
+  backend-user:
+    image: udagram-api-user:${TAG:-v1}
+    pull_policy: never
+    environment:
+      - POSTGRES_USERNAME
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_HOST
+      - JWT_SECRET
+      - URL
+
+  backend-feed:
+    image: udagram-api-feed:${TAG:-v1}
+    pull_policy: never
+    environment:
+      - POSTGRES_USERNAME
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_HOST
+      - AWS_BUCKET
+      - AWS_REGION
+      - AWS_PROFILE
+      - JWT_SECRET
+      - URL
+    # AWS S3 signed URLs use the AWS SDK's shared-config credential provider
+    # (~/.aws/credentials via AWS_PROFILE). Mount your local credentials file
+    # here if you need feed uploads to work end-to-end, e.g.:
+    # volumes:
+    #   - ~/.aws:/root/.aws:ro
+
+  reverseproxy:
+    image: reverseproxy:${TAG:-v1}
+    pull_policy: never
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend-user
+      - backend-feed
+
+  frontend:
+    image: udagram-frontend:${TAG:-v1}
+    pull_policy: never
+    ports:
+      - "8100:80"
+    depends_on:
+      - reverseproxy

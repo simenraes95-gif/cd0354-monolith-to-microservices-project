@@ -1,0 +1,28 @@
+# Bump TAG (e.g. `TAG=v2 docker-compose -f docker-compose-build.yaml build --parallel`)
+# whenever you rebuild after code changes, so old images don't linger as stale
+# ":latest"/dangling images. docker-compose.yaml uses the same TAG variable, so
+# set it the same way in both when you run `docker-compose up`.
+services:
+  frontend:
+    build:
+      context: ./udagram-frontend
+      dockerfile: Dockerfile
+    image: udagram-frontend:${TAG:-v1}
+
+  reverseproxy:
+    build:
+      context: ./udagram-reverseproxy
+      dockerfile: Dockerfile
+    image: reverseproxy:${TAG:-v1}
+
+  backend-user:
+    build:
+      context: ./udagram-api-user
+      dockerfile: Dockerfile
+    image: udagram-api-user:${TAG:-v1}
+
+  backend-feed:
+    build:
+      context: ./udagram-api-feed
+      dockerfile: Dockerfile
+    image: udagram-api-feed:${TAG:-v1}
