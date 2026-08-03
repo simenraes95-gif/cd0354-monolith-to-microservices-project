@@ -9,6 +9,7 @@ env:
     - IMAGE_TAG=v${TRAVIS_BUILD_NUMBER}
 
 # DOCKER_USERNAME and DOCKER_PASSWORD must be set as encrypted environment
+
 # variables in the Travis repository settings (Settings > Environment Variables).
 # Do not commit them here.
 before_install:
