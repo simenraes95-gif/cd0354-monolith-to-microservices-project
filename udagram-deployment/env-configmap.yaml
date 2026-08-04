@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+data:
+  POSTGRES_HOST: postgres1.cklousci2c4e.us-east-1.rds.amazonaws.com
+  POSTGRES_DB: postgres
+  AWS_REGION: us-east-1
+  AWS_PROFILE: default
+  AWS_BUCKET: refactor-monolyth
+  URL: http://localhost:8100
